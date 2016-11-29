@@ -17,13 +17,8 @@ class Application(tk.Frame):
 		self.quit.pack(side="bottom")
 
 	def parsePdf(self):
+		print("Parse PDF here.")
 		# Open pdf parser
-
-		# pdfFileObj = open('StudentStudyLoad.pdf', 'rb')
-		# pdfReader = pypdf.PdfFileReader(pdfFileObj)
-		# print(pdfReader.numPages)
-		# pageObj = pdfReader.getPage(0)
-		# print(pageObj.extractText())
 
 root = tk.Tk()
 app = Application(master=root)
