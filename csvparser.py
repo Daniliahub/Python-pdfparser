@@ -1,4 +1,5 @@
 import csv
+from datetime import datetime
 
 class CsvParser():
 	def __init__(self, filename):
@@ -53,14 +54,32 @@ class CsvParser():
 			# self.subjs[0][1] = self.subjs[0][1].split('  ')
 			(subj).extend(subj[1].split('  '))
 			del subj[1]
-		# print(self.subjs[0][1])
-		self.printList(self.subjs, len(self.subjs))
+		self.subjsLen = len(self.subjs)
+		self.dispSched()
 
 	def dispSched(self):
 		str = "<table><tr><th>Time</th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th><th>Saturday</th></tr>"
-		# for subj in self.subjs
-		# 	self.subjs[0][1] = self.subjs[0][1].split('  ')
+		for subj in self.subjs:
+			subj[2] = subj[2].split(' - ')
 
+			date = [datetime.strptime(subj[2][0],"%I:%M %p"), datetime.strptime(subj[2][1],"%I:%M %p")]
+			# print(date[0].time()," ",date[1].time())
+			diff = date[1] - date[0]
+			diff = diff/30
+			diff = (diff.seconds//60)%60
+			(subj[2]).append(diff)
+		timeval = datetime.strptime("07:30","%H:%M")
+		y = datetime.timedelta(0, 1800)
+		for x in range(1, 25):
+			# for subj in self.subjs:
+			# 	if timeval.time() == datetime.strptime(subj[2][0],"%I:%M %p").time():
+			# 		pass
+			# 	else:
+			# 		pass
+			timeinc = timeval + y
+			print(timeinc)
+			# subj[2][1] = subj[2][1].replace(" PM","")
+		# self.printList(self.subjs, self.subjsLen)
 
 	def printList(self, list, length):
 		print('\n'.join('{}: {}'.format(*k) for k in enumerate(list)))
