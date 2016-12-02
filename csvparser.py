@@ -18,9 +18,9 @@ class CsvParser():
 			reader = csv.reader(f)
 			self.lines = list(reader)
 		self.length = len(self.lines)
-		self.getSubjects()
+		self.buildSubjects()
 
-	def getSubjects(self):
+	def buildSubjects(self):
 		# if 'GROUP' in self.lines[3]:
 		del self.lines[self.length-2:self.length]
 		del self.lines[0:4]
@@ -33,13 +33,27 @@ class CsvParser():
 			self.lines[y] = line
 			y+=1
 		self.length = len(self.lines)
-		self.printList()
-		# else:
-		# 	print('Error')
+		if self.length % 2 == 0:
+			# self.printList(self.lines, self.length)
+			self.buildSched()
+		else:
+			print('Error. Incorrect Processing of Subjects')
 
-	def printList(self):
-		print('\n'.join('{}: {}'.format(*k) for k in enumerate(self.lines)))
-		print("Length: ",(self.length))
+	def buildSched(self):
+		self.subjs = []
+		y = 0
+		for line in self.lines:
+			index = self.lines.index(line)
+			if index % 2 == 0:
+				self.subjs.append([line[1]])
+			else:
+				(self.subjs[y]).append(line[0])
+				y+=1
+		self.printList(self.subjs, len(self.subjs))
+
+	def printList(self, list, length):
+		print('\n'.join('{}: {}'.format(*k) for k in enumerate(list)))
+		print("Length: ",(length))
 
 	# usage: findWholeWord('seek')('those who seek shall find')
 	# def findWholeWord(self, word):
