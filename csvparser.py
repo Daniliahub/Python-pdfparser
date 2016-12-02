@@ -48,8 +48,19 @@ class CsvParser():
 				self.subjs.append([line[1]])
 			else:
 				(self.subjs[y]).append(line[0])
-				y+=1
+				y += 1
+		for subj in self.subjs:
+			# self.subjs[0][1] = self.subjs[0][1].split('  ')
+			(subj).extend(subj[1].split('  '))
+			del subj[1]
+		# print(self.subjs[0][1])
 		self.printList(self.subjs, len(self.subjs))
+
+	def dispSched(self):
+		str = "<table><tr><th>Time</th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th><th>Saturday</th></tr>"
+		# for subj in self.subjs
+		# 	self.subjs[0][1] = self.subjs[0][1].split('  ')
+
 
 	def printList(self, list, length):
 		print('\n'.join('{}: {}'.format(*k) for k in enumerate(list)))
