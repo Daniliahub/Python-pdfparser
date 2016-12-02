@@ -1,5 +1,5 @@
 import csv
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class CsvParser():
 	def __init__(self, filename):
@@ -69,15 +69,15 @@ class CsvParser():
 			diff = (diff.seconds//60)%60
 			(subj[2]).append(diff)
 		timeval = datetime.strptime("07:30","%H:%M")
-		y = datetime.timedelta(0, 1800)
+		y = timedelta(0, 1800)
 		for x in range(1, 25):
-			# for subj in self.subjs:
-			# 	if timeval.time() == datetime.strptime(subj[2][0],"%I:%M %p").time():
-			# 		pass
-			# 	else:
-			# 		pass
-			timeinc = timeval + y
-			print(timeinc)
+			for subj in self.subjs:
+				if timeval.time() == datetime.strptime(subj[2][0],"%I:%M %p").time():
+					pass
+				else:
+					pass
+			timeval += y
+			# print(timeval.strftime("%I:%M %p"))
 			# subj[2][1] = subj[2][1].replace(" PM","")
 		# self.printList(self.subjs, self.subjsLen)
 
