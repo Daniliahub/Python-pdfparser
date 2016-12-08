@@ -88,6 +88,7 @@ class CsvParser():
 				for subj in self.subjs:
 					subjTime = datetime.strptime(subj[2][0],"%I:%M %p").time()
 					subjDates = subj[1].split(",")
+					timenow = timeval.time()
 					if timeval.time() == subjTime:
 						for subdate in subjDates:
 							if subdate == date[0]:
@@ -95,9 +96,11 @@ class CsvParser():
 								spandate = subdate
 								tabl += "<td rowspan='"+str(span[spanid])+"'>"+subj[0]+"<br>"+subj[3]+"</td>"
 								spanid += 1
-							else:
-								print(span,' ',subj[0])
-								tabl += "<td></td>"
+							# else:
+							# 	# print(span,' ',subj[0])
+							# 	tabl += "<td></td>"
+					
+				tabl += "<td></td>"
 
 			# for subj in self.subjs:
 			# 	if timeval.time() == datetime.strptime(subj[2][0],"%I:%M %p").time():
