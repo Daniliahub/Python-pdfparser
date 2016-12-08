@@ -64,7 +64,7 @@ class CsvParser():
 		# subj[2][2] - Number of 30 minute intervals
 		# subj[3] - Class Location
 		dates = [['M','Monday'],['T','Tuesday'],['W','Wednesday'],['Th','Thursday'],['F','Friday'],['Sat','Saturday']]
-		str = "<table><tr><th>Time</th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th><th>Saturday</th></tr>"
+		tabl = "<!DOCTYPE html><html><head><style>table,th,td{border: 1px solid black;border-collapse: collapse;}</style></head><body><table><thead><tr><th>Time</th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th><th>Saturday</th></tr></thead><tbody>"
 		for subj in self.subjs:
 			subj[2] = subj[2].split(' - ')
 			date = [datetime.strptime(subj[2][0],"%I:%M %p"), datetime.strptime(subj[2][1],"%I:%M %p")]
@@ -75,23 +75,48 @@ class CsvParser():
 			(subj[2]).append(diff)
 		timeval = datetime.strptime("07:30","%H:%M")
 		y = timedelta(0, 1800)
-		for x in range(1, 26):
+		cnt = 0
+		span = 0
+		for x in range(1, 25):
 			# print(timeval.time()," ",x)
-			str += "<tr><td>"+timeval.strftime("%I:%M %p")+"</td>"
+			tabl += "<tr><td>"+timeval.strftime("%I:%M")+' - '+(timeval+y).strftime("%I:%M")+"</td>"
 			for subj in self.subjs:
 				if timeval.time() == datetime.strptime(subj[2][0],"%I:%M %p").time():
-					# print(subj[2][0],' ')
+					# print(timeval.time(),' ',datetime.strptime(subj[2][0],"%I:%M %p").time())
 					for date in dates:
-						if subj[1] == date:
-							pass
-					pass
+						subjDates = subj[1].split(",")
+						for subjDate in subjDates:
+							if subjDate == date[0]:
+								span = subj[2][2]
+								tabl += "<td rowspan='"+str(span)+"'>"+subj[0]+"<br>"+subj[3]+"</td>"
+								pass
+							else:
+								tabl += "<td></td>"
+							# if span > 0:
+							# 	span -= 1
+							# 	print(span)
+							# else: 
+							# 	tabl += "<td></td>"
 				else:
+					cnt += 1
 					pass
-			str += "</tr>"
+			if cnt == self.subjsLen:
+				tabl += "<td></td><td></td><td></td><td></td><td></td><td></td>"
+				# flag += 1
+				# print(cnt,' ',flag)
+			cnt = 0
+			tabl += "</tr>"
 			timeval += y
 			# print(timeval.strftime("%I:%M %p"))
 			# subj[2][1] = subj[2][1].replace(" PM","")
-		self.printList(self.subjs, self.subjsLen)
+		tabl += "</tbody></body></html>"
+		self.writeHtml(tabl)
+		# self.printList(self.subjs, self.subjsLen)
+
+	def writeHtml(self, html):
+		f = open(self.filename+"html", "w")
+		f.write(html)
+		f.close()
 
 	def printList(self, list, length):
 		print('\n'.join('{}: {}'.format(*k) for k in enumerate(list)))
