@@ -76,7 +76,9 @@ class CsvParser():
 		timeval = datetime.strptime("07:30","%H:%M")
 		y = timedelta(0, 1800)
 		cnt = 0
-		span = 0
+		span = []
+		spanid = 0
+		spandate = ''
 		for x in range(1, 25):
 			# print(timeval.time()," ",x)
 			tabl += "<tr><td>"+timeval.strftime("%I:%M")+' - '+(timeval+y).strftime("%I:%M")+"</td>"
@@ -87,9 +89,9 @@ class CsvParser():
 						subjDates = subj[1].split(",")
 						for subjDate in subjDates:
 							if subjDate == date[0]:
-								span = subj[2][2]
+								span.append(subj[2][2])
+								spandate = subjDate
 								tabl += "<td rowspan='"+str(span)+"'>"+subj[0]+"<br>"+subj[3]+"</td>"
-								pass
 							else:
 								tabl += "<td></td>"
 							# if span > 0:
@@ -97,6 +99,9 @@ class CsvParser():
 							# 	print(span)
 							# else: 
 							# 	tabl += "<td></td>"
+						# span[spanid] -= 1
+						# spanid += 1
+						print(span)
 				else:
 					cnt += 1
 					pass
