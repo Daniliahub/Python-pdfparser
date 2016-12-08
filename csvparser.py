@@ -14,8 +14,7 @@ class CsvParser():
 		# 	self.lines = f.readlines()
 		
 		# self.lines = [line.rstrip('\n') for line in open(self.filename)]
-
-		with open(self.filename, 'r') as f:
+		with open(self.filename+"csv", 'r') as f:
 			reader = csv.reader(f)
 			self.lines = list(reader)
 		self.length = len(self.lines)
@@ -58,10 +57,16 @@ class CsvParser():
 		self.dispSched()
 
 	def dispSched(self):
+		# subj[0] - Class Code
+		# subj[1] - Days
+		# subj[2][0] - Start time
+		# subj[2][1] - End time
+		# subj[2][2] - Number of 30 minute intervals
+		# subj[3] - Class Location
+		dates = [['M','Monday'],['T','Tuesday'],['W','Wednesday'],['Th','Thursday'],['F','Friday'],['Sat','Saturday']]
 		str = "<table><tr><th>Time</th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th><th>Saturday</th></tr>"
 		for subj in self.subjs:
 			subj[2] = subj[2].split(' - ')
-
 			date = [datetime.strptime(subj[2][0],"%I:%M %p"), datetime.strptime(subj[2][1],"%I:%M %p")]
 			# print(date[0].time()," ",date[1].time())
 			diff = date[1] - date[0]
@@ -70,16 +75,23 @@ class CsvParser():
 			(subj[2]).append(diff)
 		timeval = datetime.strptime("07:30","%H:%M")
 		y = timedelta(0, 1800)
-		for x in range(1, 25):
+		for x in range(1, 26):
+			# print(timeval.time()," ",x)
+			str += "<tr><td>"+timeval.strftime("%I:%M %p")+"</td>"
 			for subj in self.subjs:
 				if timeval.time() == datetime.strptime(subj[2][0],"%I:%M %p").time():
+					# print(subj[2][0],' ')
+					for date in dates:
+						if subj[1] == date:
+							pass
 					pass
 				else:
 					pass
+			str += "</tr>"
 			timeval += y
 			# print(timeval.strftime("%I:%M %p"))
 			# subj[2][1] = subj[2][1].replace(" PM","")
-		# self.printList(self.subjs, self.subjsLen)
+		self.printList(self.subjs, self.subjsLen)
 
 	def printList(self, list, length):
 		print('\n'.join('{}: {}'.format(*k) for k in enumerate(list)))
@@ -89,5 +101,5 @@ class CsvParser():
 	# def findWholeWord(self, word):
 	# 	return re.compile(r'\b({0})\b'.format(word), flags=re.IGNORECASE).search
 
-parse = CsvParser("StudentStudyLoad.csv")
+parse = CsvParser("StudentStudyLoad.")
 parse.readCsv()
