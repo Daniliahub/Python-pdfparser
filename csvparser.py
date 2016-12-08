@@ -79,36 +79,49 @@ class CsvParser():
 		span = []
 		spanid = 0
 		spandate = ''
+		# 7:30 AM - 7:30 PM
 		for x in range(1, 25):
 			# print(timeval.time()," ",x)
 			tabl += "<tr><td>"+timeval.strftime("%I:%M")+' - '+(timeval+y).strftime("%I:%M")+"</td>"
-			for subj in self.subjs:
-				if timeval.time() == datetime.strptime(subj[2][0],"%I:%M %p").time():
-					# print(timeval.time(),' ',datetime.strptime(subj[2][0],"%I:%M %p").time())
-					for date in dates:
-						subjDates = subj[1].split(",")
-						for subjDate in subjDates:
-							if subjDate == date[0]:
+			# Monday - Saturday
+			for date in dates:
+				for subj in self.subjs:
+					subjTime = datetime.strptime(subj[2][0],"%I:%M %p").time()
+					subjDates = subj[1].split(",")
+					if timeval.time() == subjTime:
+						for subdate in subjDates:
+							if subdate == date[0]:
 								span.append(subj[2][2])
-								spandate = subjDate
-								tabl += "<td rowspan='"+str(span)+"'>"+subj[0]+"<br>"+subj[3]+"</td>"
+								spandate = subdate
+								tabl += "<td rowspan='"+str(span[spanid])+"'>"+subj[0]+"<br>"+subj[3]+"</td>"
+								spanid += 1
 							else:
+								print(span,' ',subj[0])
 								tabl += "<td></td>"
-							# if span > 0:
-							# 	span -= 1
-							# 	print(span)
-							# else: 
-							# 	tabl += "<td></td>"
-						# span[spanid] -= 1
-						# spanid += 1
-						print(span)
-				else:
-					cnt += 1
-					pass
-			if cnt == self.subjsLen:
-				tabl += "<td></td><td></td><td></td><td></td><td></td><td></td>"
-				# flag += 1
-				# print(cnt,' ',flag)
+
+			# for subj in self.subjs:
+			# 	if timeval.time() == datetime.strptime(subj[2][0],"%I:%M %p").time():
+			# 		# print(timeval.time(),' ',datetime.strptime(subj[2][0],"%I:%M %p").time())
+			# 		for date in dates:
+			# 			subjDates = subj[1].split(",")
+			# 			for subjDate in subjDates:
+			# 				if subjDate == date[0]:
+			# 					span.append(subj[2][2])
+			# 					spandate = subjDate
+			# 					tabl += "<td rowspan='"+str(span[spanid])+"'>"+subj[0]+"<br>"+subj[3]+"</td>"
+			# 					spanid += 1
+			# 				else:
+			# 					tabl += "<td></td>"
+			# 				# if span > 0:
+			# 				# 	span -= 1
+			# 				# 	print(span)
+			# 				# else: 
+			# 				# 	tabl += "<td></td>"
+			# 	else:
+			# 		cnt += 1
+			# 		pass
+			# if cnt == self.subjsLen:
+			# 	tabl += "<td></td><td></td><td></td><td></td><td></td><td></td>"
 			cnt = 0
 			tabl += "</tr>"
 			timeval += y
